@@ -27,7 +27,7 @@ public class Graphix : Game
         SetScreenDimensions(1000, 800);
 
         float orbitMass = 10;
-        float fixMass = 5000;
+        float fixMass = 50000;
         _bodies.AddBody(new Vector2(200, 100), orbitMass);
         _bodies.AddBody(new Vector2(_screenWidth - 10, _screenHeight - 10), orbitMass);
         _bodies.AddBody(new Vector2(_screenWidth - 10, 0), orbitMass);
