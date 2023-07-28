@@ -11,7 +11,7 @@ public class Graphix : Game
     private KeyControls _keyControls = new KeyControls();
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private Blob _blob;
+    private Bodies _bodies = new Bodies();
 
     public Graphix()
     {
@@ -26,7 +26,8 @@ public class Graphix : Game
 
         SetScreenDimensions(1200, 800);
 
-        _blob = new Blob(new Vector2(_screenWidth / 2, _screenHeight / 2));
+        _bodies.AddBody(new Vector2(0, 0));
+        _bodies.AddBody(new Vector2(_screenWidth / 2, _screenHeight / 2));
 
         base.Initialize();
     }
@@ -37,7 +38,7 @@ public class Graphix : Game
 
         // TODO: use this.Content to load your game content here
 
-        _blob.Load(Content.Load<Texture2D>("imgs/red_blob"));
+        _bodies.LoadBodies(Content.Load<Texture2D>("imgs/red_blob"));
     }
 
     protected override void Update(GameTime gameTime)
@@ -54,17 +55,20 @@ public class Graphix : Game
 
             float delta = 1f;
             bool once = false;
+            Vector2 deltaVector = new Vector2(0, 0);
             if (_keyControls.Pressed(keyState, Keys.Left, once))
-                _blob.AddVelocity(new Vector2(-delta, 0));
+                deltaVector += new Vector2(-delta, 0);
             if (_keyControls.Pressed(keyState, Keys.Right, once))
-                _blob.AddVelocity(new Vector2(delta, 0));
+                deltaVector += new Vector2(delta, 0);
             if (_keyControls.Pressed(keyState, Keys.Up, once))
-                _blob.AddVelocity(new Vector2(0, -delta));
+                deltaVector += new Vector2(0, -delta);
             if (_keyControls.Pressed(keyState, Keys.Down, once))
-                _blob.AddVelocity(new Vector2(0, delta));
+                deltaVector += new Vector2(0, delta);
+            
+            _bodies.AddVelocity(deltaVector);
         }
 
-        _blob.Update(gameTime, _screenWidth, _screenHeight);
+        _bodies.Update(gameTime, _screenWidth, _screenHeight);
 
         base.Update(gameTime);
     }
@@ -77,8 +81,7 @@ public class Graphix : Game
 
         _spriteBatch.Begin();
 
-        _blob.DrawVelocityVector(_spriteBatch);
-        _blob.Draw(_spriteBatch);
+        _bodies.DrawBodies(_spriteBatch);
         
         _spriteBatch.End();
 

@@ -3,9 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGraphix;
 
-public class Blob {
+public class Body {
     public Vector2 position { get; set; }
     public Vector2 velocity { get; set; }
+    public float mass { get; set; } = 10;
 
     private Texture2D _texture { get; set; }
 
@@ -14,10 +15,10 @@ public class Blob {
 
     // boundaries effect values
     private float _bounciness = -0.5f;
-    private float _friction = 0.1f;
+    private float _friction = 0;
     
 
-    public Blob(Vector2 startPos) {
+    public Body(Vector2 startPos) {
         position = startPos;
         velocity = new Vector2(0, 0);
     }
