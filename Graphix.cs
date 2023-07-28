@@ -1,49 +1,41 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace MonoGraphix;
 
-public class Graphix : Game
-{
+public class Graphix : Game {
     private int _screenWidth;
     private int _screenHeight;
     private KeyControls _keyControls = new KeyControls();
+    private Random _random = new Random();
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Bodies _bodies = new Bodies();
+    private bool _velocityTrail = false;
 
-    public Graphix()
-    {
+    public Graphix() {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
 
-    protected override void Initialize()
-    {
+    protected override void Initialize() {
         // TODO: Add your initialization logic here
 
         SetScreenDimensions(1000, 800);
 
-        float orbitMass = 10;
-        float fixMass = 50000;
-        _bodies.AddBody(new Vector2(200, 100), orbitMass);
-        _bodies.AddBody(new Vector2(_screenWidth - 10, _screenHeight - 10), orbitMass);
-        _bodies.AddBody(new Vector2(_screenWidth - 10, 0), orbitMass);
-        _bodies.AddBody(new Vector2(0, _screenHeight - 10), orbitMass);
-        _bodies.AddBody(new Vector2(0, 0), orbitMass);
-        _bodies.AddBody(new Vector2(_screenWidth - 100, _screenHeight - 100), orbitMass);
-        _bodies.AddBody(new Vector2(_screenWidth - 100, 0), orbitMass);
-        _bodies.AddBody(new Vector2(0, _screenHeight - 100), orbitMass);
-
+        float fixMass = 5000;
         _bodies.AddBody(new Vector2(_screenWidth / 2, _screenHeight / 2), fixMass, true);
+        float orbitMass = 100;
+        for (int i = 0; i < 20; i++)
+            _bodies.AddBody(new Vector2(GetRandomX(), GetRandomY()), orbitMass);        
 
         base.Initialize();
     }
 
-    protected override void LoadContent()
-    {
+    protected override void LoadContent() {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
@@ -51,8 +43,7 @@ public class Graphix : Game
         _bodies.LoadBodies(Content.Load<Texture2D>("imgs/red_blob"));
     }
 
-    protected override void Update(GameTime gameTime)
-    {
+    protected override void Update(GameTime gameTime) {
         _screenWidth = _graphics.PreferredBackBufferWidth;
         _screenHeight = _graphics.PreferredBackBufferHeight;
 
@@ -83,28 +74,34 @@ public class Graphix : Game
         base.Update(gameTime);
     }
 
-    protected override void Draw(GameTime gameTime)
-    {
+    protected override void Draw(GameTime gameTime) {
         GraphicsDevice.Clear(Color.DarkGray);
 
         // TODO: Add your drawing code here
 
         _spriteBatch.Begin();
 
-        _bodies.DrawBodies(_spriteBatch, false);
+        _bodies.DrawBodies(_spriteBatch, _velocityTrail);
         
         _spriteBatch.End();
 
         base.Draw(gameTime);
     }
 
-    private void SetScreenDimensions(int width, int height)
-    {
+    private void SetScreenDimensions(int width, int height) {
         _graphics.PreferredBackBufferWidth = width;
         _graphics.PreferredBackBufferHeight = height;
         _graphics.ApplyChanges();
 
         _screenWidth = width;
         _screenHeight = height;
+    }
+
+    private int GetRandomX() {
+        return _random.Next(0, _screenWidth - 10);
+    }
+
+    private int GetRandomY() {
+        return _random.Next(0, _screenHeight - 10);
     }
 }
