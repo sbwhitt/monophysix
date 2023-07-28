@@ -24,10 +24,20 @@ public class Graphix : Game
     {
         // TODO: Add your initialization logic here
 
-        SetScreenDimensions(1200, 800);
+        SetScreenDimensions(1000, 800);
 
-        _bodies.AddBody(new Vector2(0, 0));
-        _bodies.AddBody(new Vector2(_screenWidth / 2, _screenHeight / 2));
+        float orbitMass = 10;
+        float fixMass = 5000;
+        _bodies.AddBody(new Vector2(200, 100), orbitMass);
+        _bodies.AddBody(new Vector2(_screenWidth - 10, _screenHeight - 10), orbitMass);
+        _bodies.AddBody(new Vector2(_screenWidth - 10, 0), orbitMass);
+        _bodies.AddBody(new Vector2(0, _screenHeight - 10), orbitMass);
+        _bodies.AddBody(new Vector2(0, 0), orbitMass);
+        _bodies.AddBody(new Vector2(_screenWidth - 100, _screenHeight - 100), orbitMass);
+        _bodies.AddBody(new Vector2(_screenWidth - 100, 0), orbitMass);
+        _bodies.AddBody(new Vector2(0, _screenHeight - 100), orbitMass);
+
+        _bodies.AddBody(new Vector2(_screenWidth / 2, _screenHeight / 2), fixMass, true);
 
         base.Initialize();
     }
@@ -75,13 +85,13 @@ public class Graphix : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.LightGray);
+        GraphicsDevice.Clear(Color.DarkGray);
 
         // TODO: Add your drawing code here
 
         _spriteBatch.Begin();
 
-        _bodies.DrawBodies(_spriteBatch);
+        _bodies.DrawBodies(_spriteBatch, false);
         
         _spriteBatch.End();
 

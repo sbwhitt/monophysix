@@ -9,6 +9,7 @@ public class Body {
     public float mass { get; set; } = 10;
 
     private Texture2D _texture { get; set; }
+    private bool _fix;
 
     // ambient forces acting on blob (gravity, etc)
     private Vector2 _ambient { get; set; } = new Vector2(0, 0);
@@ -18,9 +19,11 @@ public class Body {
     private float _friction = 0;
     
 
-    public Body(Vector2 startPos) {
+    public Body(Vector2 startPos, float startMass = 10, bool fix = false) {
         position = startPos;
         velocity = new Vector2(0, 0);
+        mass = startMass;
+        _fix = fix;
     }
 
     public void Load(Texture2D texture) {
@@ -34,7 +37,8 @@ public class Body {
         CheckCollision(limitX, limitY);
 
         velocity += _ambient;
-        position += velocity;
+        if (!_fix)
+            position += velocity;
 
         ApplyFriction(limitX, limitY);
         CheckBoundaries(limitX, limitY);
@@ -58,11 +62,11 @@ public class Body {
         );
     }
 
-    // Helpers
-
-    private Vector2 GetCenter() {
+    public Vector2 GetCenter() {
         return new Vector2(position.X + _texture.Width / 2, position.Y + _texture.Height / 2);
     }
+
+    // Helpers
 
     private void CheckCollision(int limitX, int limitY) {
         CheckCollisionX(limitX);
