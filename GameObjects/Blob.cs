@@ -10,8 +10,8 @@ public class Blob {
     private Texture2D _texture { get; set; }
     private Vector2 _ambient { get; set; } = new Vector2(0, 0.2f);
 
-    private float _deltaX = -0.75f;
-    private float _deltaY =-0.75f;
+    private float _bounciness = -0.5f;
+    private float _friction = 0.1f;
     
 
     public Blob(Vector2 startPos) {
@@ -32,6 +32,7 @@ public class Blob {
         velocity += _ambient;
         position += velocity;
 
+        ApplyFriction(limitX, limitY);
         CheckBoundaries(limitX, limitY);
     }
     
@@ -66,19 +67,50 @@ public class Blob {
 
     private void CheckVelocityX(int limitX) {
         if (position.X + velocity.X < 0) {
-            velocity = new Vector2(velocity.X * _deltaX, velocity.Y);
+            velocity = new Vector2(velocity.X * _bounciness, velocity.Y);
         }
         if (position.X + velocity.X > limitX) {
-            velocity = new Vector2(velocity.X * _deltaX, velocity.Y);
+            velocity = new Vector2(velocity.X * _bounciness, velocity.Y);
         }
     }
 
     private void CheckVelocityY(int limitY) {
         if (position.Y + velocity.Y < 0) {
-            velocity = new Vector2(velocity.X, velocity.Y * _deltaY);
+            velocity = new Vector2(velocity.X, velocity.Y * _bounciness);
         }
         if (position.Y + velocity.Y > limitY) {
-            velocity = new Vector2(velocity.X, velocity.Y * _deltaY);
+            velocity = new Vector2(velocity.X, velocity.Y * _bounciness);
+        }
+    }
+
+    private void ApplyFriction(int limitX, int limitY) {
+        if (position.Y <= 0 || position.Y >= limitY)
+            ApplyFrictionX();
+        if (position.X <= 0 || position.X >= limitX)
+            ApplyFrictionY();
+    }
+
+    private void ApplyFrictionX() {
+        if (velocity.X > _friction) {
+            velocity += new Vector2(-1 *  _friction, 0);
+        }
+        else if (velocity.X < -1*_friction) {
+            velocity += new Vector2(_friction, 0);
+        }
+        else {
+            velocity = new Vector2(0, velocity.Y);
+        }
+    }
+
+    private void ApplyFrictionY() {
+        if (velocity.Y > _friction) {
+            velocity += new Vector2(0, -1 *  _friction);
+        }
+        else if (velocity.Y < -1*_friction) {
+            velocity += new Vector2(0, _friction);
+        }
+        else {
+            velocity = new Vector2(velocity.X, 0);
         }
     }
 
