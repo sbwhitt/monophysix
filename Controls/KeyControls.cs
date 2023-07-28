@@ -6,7 +6,7 @@ namespace MonoGraphix;
 public class KeyControls {
     private Dictionary<Keys, bool> _keysPressed = new Dictionary<Keys, bool>();
 
-    public bool Pressed(KeyboardState state, Keys key) {
+    public bool Pressed(KeyboardState state, Keys key, bool once = false) {
         if (!_keysPressed.ContainsKey(key))
             _keysPressed.Add(key, state.IsKeyDown(key));
 
@@ -15,6 +15,8 @@ public class KeyControls {
                 _keysPressed[key] = true;
                 return true;
             }
+            if (!once)
+                return true;
             return false;
         }
         else {

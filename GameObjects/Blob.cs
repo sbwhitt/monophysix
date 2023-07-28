@@ -8,8 +8,11 @@ public class Blob {
     public Vector2 velocity { get; set; }
 
     private Texture2D _texture { get; set; }
-    private Vector2 _ambient { get; set; } = new Vector2(0, 0.2f);
 
+    // ambient forces acting on blob (gravity, etc)
+    private Vector2 _ambient { get; set; } = new Vector2(0, 0);
+
+    // boundaries effect values
     private float _bounciness = -0.5f;
     private float _friction = 0.1f;
     
@@ -27,7 +30,7 @@ public class Blob {
         int limitX = width - _texture.Width;
         int limitY = height - _texture.Height;
 
-        CheckVelocity(limitX, limitY);
+        CheckCollision(limitX, limitY);
 
         velocity += _ambient;
         position += velocity;
@@ -60,12 +63,12 @@ public class Blob {
         return new Vector2(position.X + _texture.Width / 2, position.Y + _texture.Height / 2);
     }
 
-    private void CheckVelocity(int limitX, int limitY) {
-        CheckVelocityX(limitX);
-        CheckVelocityY(limitY);
+    private void CheckCollision(int limitX, int limitY) {
+        CheckCollisionX(limitX);
+        CheckCollisionY(limitY);
     }
 
-    private void CheckVelocityX(int limitX) {
+    private void CheckCollisionX(int limitX) {
         if (position.X + velocity.X < 0) {
             velocity = new Vector2(velocity.X * _bounciness, velocity.Y);
         }
@@ -74,7 +77,7 @@ public class Blob {
         }
     }
 
-    private void CheckVelocityY(int limitY) {
+    private void CheckCollisionY(int limitY) {
         if (position.Y + velocity.Y < 0) {
             velocity = new Vector2(velocity.X, velocity.Y * _bounciness);
         }

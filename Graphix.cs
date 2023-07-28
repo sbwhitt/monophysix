@@ -52,14 +52,16 @@ public class Graphix : Game
             if (keyState.IsKeyDown(Keys.Q))
                 Exit();
 
-            if (_keyControls.Pressed(keyState, Keys.Left))
-                _blob.AddVelocity(new Vector2(-5f, 0));
-            if (_keyControls.Pressed(keyState, Keys.Right))
-                _blob.AddVelocity(new Vector2(5f, 0));
-            if (_keyControls.Pressed(keyState, Keys.Up))
-                _blob.AddVelocity(new Vector2(0, -5f));
-            if (_keyControls.Pressed(keyState, Keys.Down))
-                _blob.AddVelocity(new Vector2(0, 5f));
+            float delta = 1f;
+            bool once = false;
+            if (_keyControls.Pressed(keyState, Keys.Left, once))
+                _blob.AddVelocity(new Vector2(-delta, 0));
+            if (_keyControls.Pressed(keyState, Keys.Right, once))
+                _blob.AddVelocity(new Vector2(delta, 0));
+            if (_keyControls.Pressed(keyState, Keys.Up, once))
+                _blob.AddVelocity(new Vector2(0, -delta));
+            if (_keyControls.Pressed(keyState, Keys.Down, once))
+                _blob.AddVelocity(new Vector2(0, delta));
         }
 
         _blob.Update(gameTime, _screenWidth, _screenHeight);
