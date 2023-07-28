@@ -46,19 +46,21 @@ public class Graphix : Game
         _screenHeight = _graphics.PreferredBackBufferHeight;
 
         KeyboardState keyState = Keyboard.GetState();
-        if (keyState.IsKeyDown(Keys.Escape))
-            Exit();
 
-        // TODO: Add your update logic here
+        // IsActive block only accepts input if window is focused
+        if (IsActive) {
+            if (keyState.IsKeyDown(Keys.Q))
+                Exit();
 
-        if (_keyControls.Pressed(keyState, Keys.Left))
-            _blob.AddVelocity(new Vector2(-5f, 0));
-        if (_keyControls.Pressed(keyState, Keys.Right))
-            _blob.AddVelocity(new Vector2(5f, 0));
-        if (_keyControls.Pressed(keyState, Keys.Up))
-            _blob.AddVelocity(new Vector2(0, -5f));
-        if (_keyControls.Pressed(keyState, Keys.Down))
-            _blob.AddVelocity(new Vector2(0, 5f));
+            if (_keyControls.Pressed(keyState, Keys.Left))
+                _blob.AddVelocity(new Vector2(-5f, 0));
+            if (_keyControls.Pressed(keyState, Keys.Right))
+                _blob.AddVelocity(new Vector2(5f, 0));
+            if (_keyControls.Pressed(keyState, Keys.Up))
+                _blob.AddVelocity(new Vector2(0, -5f));
+            if (_keyControls.Pressed(keyState, Keys.Down))
+                _blob.AddVelocity(new Vector2(0, 5f));
+        }
 
         _blob.Update(gameTime, _screenWidth, _screenHeight);
 
