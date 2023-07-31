@@ -1,2 +1,2 @@
-# MonoGraphix
+# MonoPhysix
 Monogame physics/graphics playground
